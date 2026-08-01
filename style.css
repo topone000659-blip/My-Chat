@@ -1,1 +1,20 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background: white;
+    font-family: Arial, sans-serif;
+}
+
+.splash {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.splash h1 {
+    color: #16C784;
+    font-size: 48px;
+    font-weight: bold;
+}
 
