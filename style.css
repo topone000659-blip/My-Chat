@@ -1,40 +1,51 @@
 body {
-    margin: 0;
-    height: 100vh;
-    background: white;
-    font-family: Arial, sans-serif;
+    margin:0;
+    background:white;
+    font-family:Arial,sans-serif;
 }
 
-.login {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+
+.home {
+    padding:20px;
 }
 
-.login h1 {
-    color: #16C784;
-    font-size: 48px;
-    margin-bottom: 40px;
+
+.top {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-input {
-    width: 280px;
-    padding: 15px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+
+.top h2 {
+    color:#16C784;
 }
 
-button {
-    margin-top: 20px;
-    width: 310px;
-    padding: 15px;
-    border-radius: 20px;
-    border: none;
-    background: #16C784;
-    color: white;
-    font-size: 18px;
+
+.chat {
+    display:flex;
+    align-items:center;
+    margin-top:25px;
 }
+
+
+.avatar {
+    width:55px;
+    height:55px;
+    background:#16C784;
+    border-radius:50%;
+    margin-right:15px;
+}
+
+
+.chat h3 {
+    margin:0;
+}
+
+
+.chat p {
+    margin:5px 0;
+    color:gray;
+}
+
 
