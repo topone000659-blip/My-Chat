@@ -103,3 +103,44 @@ body {
     color: white;
     font-size: 18px;
 }
+    .profile-screen {
+    padding: 25px;
+    text-align: center;
+}
+
+
+.profile-photo {
+    width: 100px;
+    height: 100px;
+    background: #16C784;
+    border-radius: 50%;
+    margin: 30px auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+}
+
+
+.profile-screen p {
+    color: gray;
+}
+
+
+.bio {
+    margin: 20px;
+}
+
+
+.menu {
+    margin-top: 30px;
+}
+
+
+.item {
+    background: #f7f7f7;
+    padding: 18px;
+    margin-bottom: 12px;
+    border-radius: 15px;
+    text-align: left;
+}
