@@ -1,0 +1,23 @@
+name: My Chat Build Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check project files
+        run: |
+          ls
+          test -f index.html
+          test -f style.css
+
+      - name: Build check complete
+        run: echo "My Chat UI files are ready"
