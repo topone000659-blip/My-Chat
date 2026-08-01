@@ -5,16 +5,36 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.splash {
+.login {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.splash h1 {
+.login h1 {
     color: #16C784;
     font-size: 48px;
-    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+input {
+    width: 280px;
+    padding: 15px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 20px;
+    width: 310px;
+    padding: 15px;
+    border-radius: 20px;
+    border: none;
+    background: #16C784;
+    color: white;
+    font-size: 18px;
 }
 
