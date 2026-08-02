@@ -1,101 +1,101 @@
-import React from 'react';
+import React, {useEffect, useState} from "react";
 
 import {
   View,
   Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity
-} from 'react-native';
+  FlatList
+} from "react-native";
 
-import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import colors from '../theme/colors';
+import API from "../services/api";
 
 
-const chats = [
-  {
-    id:"1",
-    name:"Ko Ko",
-    message:"Hello 👋"
-  },
-  {
-    id:"2",
-    name:"Aung Aung",
-    message:"How are you?"
-  },
-  {
-    id:"3",
-    name:"Mg Mg",
-    message:"See you later"
-  }
-];
+
+export default function ChatList({navigation}) {
 
 
-export default function ChatList(){
+  const [chats,setChats] = useState([]);
 
-  const navigation = useNavigation();
+
+
+  useEffect(()=>{
+
+    loadChats();
+
+  },[]);
+
+
+
+  const loadChats = async()=>{
+
+    try{
+
+
+      const token =
+        await AsyncStorage.getItem("token");
+
+
+
+      const response =
+        await API.get(
+
+          "/chats",
+
+          {
+            headers:{
+              Authorization:
+              `Bearer ${token}`
+            }
+          }
+
+        );
+
+
+
+      setChats(response.data);
+
+
+
+    }catch(error){
+
+      console.log(error);
+
+    }
+
+  };
+
 
 
   return (
 
-    <View style={styles.container}>
+    <View>
 
-
-      <View style={styles.header}>
-
-        <Text style={styles.title}>
-          My Chat
-        </Text>
-
-        <Text style={styles.search}>
-          🔍
-        </Text>
-
-      </View>
+      <Text>
+        Chat List
+      </Text>
 
 
       <FlatList
 
         data={chats}
 
-        keyExtractor={(item)=>item.id}
+        keyExtractor={
+          (item)=>item.user_id
+        }
+
 
         renderItem={({item})=>(
 
-          <TouchableOpacity
+          <Text>
 
-            style={styles.chatItem}
+            User: {item.user_id}
 
-            onPress={() => navigation.navigate("ChatRoom")}
-
-          >
-
-            <View style={styles.avatar}>
-            </View>
-
-
-            <View>
-
-              <Text style={styles.name}>
-                {item.name}
-              </Text>
-
-
-              <Text style={styles.message}>
-                {item.message}
-              </Text>
-
-
-            </View>
-
-
-          </TouchableOpacity>
+          </Text>
 
         )}
 
       />
-
 
     </View>
 
@@ -103,62 +103,3 @@ export default function ChatList(){
 
 }
 
-
-
-const styles = StyleSheet.create({
-
-  container:{
-    flex:1,
-    backgroundColor:colors.background,
-    padding:20
-  },
-
-
-  header:{
-    flexDirection:"row",
-    justifyContent:"space-between",
-    alignItems:"center",
-    marginBottom:25
-  },
-
-
-  title:{
-    fontSize:28,
-    fontWeight:"bold",
-    color:colors.primary
-  },
-
-
-  search:{
-    fontSize:24
-  },
-
-
-  chatItem:{
-    flexDirection:"row",
-    alignItems:"center",
-    marginBottom:25
-  },
-
-
-  avatar:{
-    width:55,
-    height:55,
-    borderRadius:50,
-    backgroundColor:colors.primary,
-    marginRight:15
-  },
-
-
-  name:{
-    fontSize:18,
-    fontWeight:"bold"
-  },
-
-
-  message:{
-    color:colors.secondaryText,
-    marginTop:5
-  }
-
-});
