@@ -1,1 +1,84 @@
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import colors from '../theme/colors';
 
+
+export default function ChatBubble({message, sender}) {
+
+  const isMe = sender === "me";
+
+  return (
+
+    <View
+      style={[
+        styles.container,
+        isMe ? styles.right : styles.left
+      ]}
+    >
+
+      <View
+        style={[
+          styles.bubble,
+          isMe
+          ? styles.send
+          : styles.receive
+        ]}
+      >
+
+        <Text
+          style={[
+            styles.text,
+            isMe && styles.sendText
+          ]}
+        >
+          {message}
+        </Text>
+
+      </View>
+
+    </View>
+
+  );
+}
+
+
+const styles = StyleSheet.create({
+
+  container:{
+    width:"100%",
+    marginVertical:5,
+    paddingHorizontal:15
+  },
+
+  left:{
+    alignItems:"flex-start"
+  },
+
+  right:{
+    alignItems:"flex-end"
+  },
+
+  bubble:{
+    padding:12,
+    borderRadius:20,
+    maxWidth:"75%"
+  },
+
+  send:{
+    backgroundColor:colors.bubbleSend
+  },
+
+  receive:{
+    backgroundColor:colors.bubbleReceive
+  },
+
+  text:{
+    color:colors.text,
+    fontSize:16
+  },
+
+  sendText:{
+    color:"#FFFFFF"
+  }
+
+});
