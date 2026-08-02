@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+
 import {
   View,
   Text,
@@ -6,6 +7,8 @@ import {
   Button,
   Alert
 } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import API from "../services/api";
 
@@ -26,39 +29,55 @@ export default function Login({navigation}) {
 
 
       const response = await API.post(
+
         "/auth/login",
+
         {
           phone,
           password
         }
+
       );
 
 
 
-      const token =
-        response.data.token;
+      const token = response.data.token;
+
+
+
+      await AsyncStorage.setItem(
+
+        "token",
+
+        token
+
+      );
 
 
 
       Alert.alert(
+
         "Success",
+
         "Login success"
+
       );
 
 
-      console.log(token);
 
+      navigation.replace("ChatList");
 
-
-      // နောက်မှာ Token Storage ထည့်မယ်
 
 
     }catch(error){
 
 
       Alert.alert(
+
         "Error",
+
         "Login failed"
+
       );
 
 
