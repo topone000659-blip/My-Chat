@@ -6,6 +6,7 @@ const pool = require("./config/database");
 
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/messages");
+const chatRoutes = require("./routes/chats");
 
 
 const app = express();
@@ -19,12 +20,11 @@ app.use(express.json());
 
 
 
-// Authentication
 app.use("/auth", authRoutes);
 
-
-// Messages
 app.use("/messages", messageRoutes);
+
+app.use("/chats", chatRoutes);
 
 
 
