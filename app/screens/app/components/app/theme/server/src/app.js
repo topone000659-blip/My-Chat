@@ -4,6 +4,9 @@ const helmet = require("helmet");
 
 const pool = require("./config/database");
 
+const authRoutes = require("./routes/auth");
+
+
 const app = express();
 
 
@@ -15,19 +18,24 @@ app.use(express.json());
 
 
 
+// Auth API
+app.use("/auth", authRoutes);
+
+
+
 app.get("/", (req, res) => {
 
   res.json({
-    message: "My Chat Server is running"
+    message:"My Chat Server is running"
   });
 
 });
 
 
 
-app.get("/database-test", async (req, res) => {
+app.get("/database-test", async (req,res)=>{
 
-  try {
+  try{
 
     const result = await pool.query(
       "SELECT NOW()"
@@ -35,16 +43,22 @@ app.get("/database-test", async (req, res) => {
 
 
     res.json({
-      database: "connected",
-      time: result.rows[0]
+
+      database:"connected",
+
+      time:result.rows[0]
+
     });
 
 
-  } catch(error) {
+  }catch(error){
 
     res.status(500).json({
-      database: "error",
-      message: error.message
+
+      database:"error",
+
+      message:error.message
+
     });
 
   }
