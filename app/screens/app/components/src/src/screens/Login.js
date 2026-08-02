@@ -1,6 +1,5 @@
-
 import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+
 import {
   View,
   Text,
@@ -9,12 +8,16 @@ import {
   StyleSheet
 } from 'react-native';
 
+import {useNavigation} from '@react-navigation/native';
+
 import colors from '../theme/colors';
 
 
 export default function Login(){
 
-  const [phone, setPhone] = useState("");
+  const navigation = useNavigation();
+
+  const [phone,setPhone] = useState("");
 
 
   return (
@@ -36,15 +39,10 @@ export default function Login(){
       />
 
 
-      
-  <TouchableOpacity
-  style={styles.button}
-  onPress={() => navigation.navigate("ChatList")}
->
-
-  
-
-
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("ChatList")}
+      >
 
         <Text style={styles.buttonText}>
           LOGIN
