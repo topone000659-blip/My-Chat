@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 
+const pool = require("./config/database");
+
 const app = express();
 
 
@@ -10,6 +12,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use(express.json());
+
 
 
 app.get("/", (req, res) => {
@@ -21,8 +24,33 @@ app.get("/", (req, res) => {
 });
 
 
+
+app.get("/database-test", async (req, res) => {
+
+  try {
+
+    const result = await pool.query(
+      "SELECT NOW()"
+    );
+
+
+    res.json({
+      database: "connected",
+      time: result.rows[0]
+    });
+
+
+  } catch(error) {
+
+    res.status(500).json({
+      database: "error",
+      message: error.message
+    });
+
+  }
+
+});
+
+
+
 module.exports = app;
-
-
-
-
