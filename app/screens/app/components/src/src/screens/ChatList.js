@@ -1,10 +1,14 @@
 import React from 'react';
+
 import {
   View,
   Text,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
+
+import {useNavigation} from '@react-navigation/native';
 
 import colors from '../theme/colors';
 
@@ -29,6 +33,9 @@ const chats = [
 
 
 export default function ChatList(){
+
+  const navigation = useNavigation();
+
 
   return (
 
@@ -56,8 +63,13 @@ export default function ChatList(){
 
         renderItem={({item})=>(
 
-          <View style={styles.chatItem}>
+          <TouchableOpacity
 
+            style={styles.chatItem}
+
+            onPress={() => navigation.navigate("ChatRoom")}
+
+          >
 
             <View style={styles.avatar}>
             </View>
@@ -74,10 +86,11 @@ export default function ChatList(){
                 {item.message}
               </Text>
 
+
             </View>
 
 
-          </View>
+          </TouchableOpacity>
 
         )}
 
@@ -149,4 +162,3 @@ const styles = StyleSheet.create({
   }
 
 });
-
