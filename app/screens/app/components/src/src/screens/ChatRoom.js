@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+
 import {
   View,
   Text,
@@ -9,6 +10,7 @@ import {
 } from 'react-native';
 
 import ChatBubble from '../components/ChatBubble';
+
 import colors from '../theme/colors';
 
 
@@ -16,7 +18,7 @@ export default function ChatRoom(){
 
   const [message,setMessage] = useState("");
 
-  const messages=[
+  const [messages,setMessages] = useState([
     {
       id:"1",
       text:"Hello 👋",
@@ -27,7 +29,30 @@ export default function ChatRoom(){
       text:"Hi, How are you?",
       sender:"me"
     }
-  ];
+  ]);
+
+
+  function sendMessage(){
+
+    if(message.trim() === ""){
+      return;
+    }
+
+
+    setMessages([
+      ...messages,
+      {
+        id:Date.now().toString(),
+        text:message,
+        sender:"me"
+      }
+    ]);
+
+
+    setMessage("");
+
+  }
+
 
 
   return (
@@ -41,9 +66,11 @@ export default function ChatRoom(){
           ←
         </Text>
 
+
         <Text style={styles.name}>
           Ko Ko
         </Text>
+
 
         <Text>
           📞 📹
@@ -62,8 +89,11 @@ export default function ChatRoom(){
         renderItem={({item})=>(
 
           <ChatBubble
+
             message={item.text}
+
             sender={item.sender}
+
           />
 
         )}
@@ -76,18 +106,31 @@ export default function ChatRoom(){
 
 
         <TextInput
+
           style={styles.input}
+
           placeholder="Message"
+
           value={message}
+
           onChangeText={setMessage}
+
         />
 
 
-        <TouchableOpacity style={styles.send}>
+
+        <TouchableOpacity
+
+          style={styles.send}
+
+          onPress={sendMessage}
+
+        >
 
           <Text style={styles.sendText}>
             ➤
           </Text>
+
 
         </TouchableOpacity>
 
@@ -103,7 +146,7 @@ export default function ChatRoom(){
 
 
 
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
 
   container:{
     flex:1,
@@ -161,9 +204,8 @@ const styles=StyleSheet.create({
 
 
   sendText:{
-    color:"#fff",
+    color:"#FFFFFF",
     fontSize:20
   }
 
 });
-
