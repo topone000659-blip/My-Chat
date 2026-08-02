@@ -8,6 +8,8 @@ import {
   FlatList
 } from "react-native";
 
+import socket from "../services/socket";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import API from "../services/api";
@@ -28,9 +30,52 @@ export default function ChatRoom({route}) {
 
   useEffect(()=>{
 
+
     loadMessages();
 
+
+    socket.connect();
+
+
+
+    socket.emit(
+      "joinRoom",
+      userId
+    );
+
+
+
+    socket.on(
+      "receiveMessage",
+      (data)=>{
+
+
+        setMessages(
+          old => [
+            ...old,
+            data
+          ]
+        );
+
+
+      }
+    );
+
+
+
+    return ()=>{
+
+      socket.off(
+        "receiveMessage"
+      );
+
+      socket.disconnect();
+
+    };
+
+
   },[]);
+
 
 
 
@@ -38,59 +83,16 @@ export default function ChatRoom({route}) {
 
     try{
 
+
       const token =
-        await AsyncStorage.getItem("token");
+      await AsyncStorage.getItem("token");
 
-
-      const myId = "MY_USER_ID";
 
 
       const response =
-        await API.get(
+      await API.get(
 
-          `/messages/${myId}/${userId}`,
-
-          {
-            headers:{
-              Authorization:
-              `Bearer ${token}`
-            }
-          }
-
-        );
-
-
-      setMessages(response.data);
-
-
-    }catch(error){
-
-      console.log(error);
-
-    }
-
-  };
-
-
-
-  const sendMessage = async()=>{
-
-    try{
-
-
-      const token =
-        await AsyncStorage.getItem("token");
-
-
-      await API.post(
-
-        "/messages",
-
-        {
-          sender_id:"MY_USER_ID",
-          receiver_id:userId,
-          message
-        },
+        `/messages/MY_USER_ID/${userId}`,
 
         {
           headers:{
@@ -102,9 +104,8 @@ export default function ChatRoom({route}) {
       );
 
 
-      setMessage("");
+      setMessages(response.data);
 
-      loadMessages();
 
 
     }catch(error){
@@ -114,6 +115,37 @@ export default function ChatRoom({route}) {
     }
 
   };
+
+
+
+
+
+  const sendMessage = async()=>{
+
+
+    const data = {
+
+      sender_id:"MY_USER_ID",
+
+      receiver_id:userId,
+
+      message
+
+    };
+
+
+
+    socket.emit(
+      "sendMessage",
+      data
+    );
+
+
+
+    setMessage("");
+
+  };
+
 
 
 
@@ -127,7 +159,7 @@ export default function ChatRoom({route}) {
         data={messages}
 
         keyExtractor={
-          (item)=>item.id
+          item=>item.id || Math.random().toString()
         }
 
         renderItem={({item})=>(
@@ -153,7 +185,6 @@ export default function ChatRoom({route}) {
       />
 
 
-
       <Button
 
         title="Send"
@@ -168,3 +199,4 @@ export default function ChatRoom({route}) {
   );
 
 }
+
