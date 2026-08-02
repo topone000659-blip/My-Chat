@@ -1,15 +1,75 @@
-import React from 'react';
+const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
 
-import AppNavigator from './src/navigation/AppNavigator';
+const pool = require("./config/database");
+
+const authRoutes = require("./routes/auth");
+const messageRoutes = require("./routes/messages");
 
 
-export default function App(){
+const app = express();
 
-  return (
 
-    <AppNavigator />
+app.use(helmet());
 
-  );
+app.use(cors());
 
-}
+app.use(express.json());
 
+
+
+// Authentication
+app.use("/auth", authRoutes);
+
+
+// Messages
+app.use("/messages", messageRoutes);
+
+
+
+app.get("/", (req,res)=>{
+
+  res.json({
+    message:"My Chat Server is running"
+  });
+
+});
+
+
+
+app.get("/database-test", async(req,res)=>{
+
+  try{
+
+    const result = await pool.query(
+      "SELECT NOW()"
+    );
+
+
+    res.json({
+
+      database:"connected",
+
+      time:result.rows[0]
+
+    });
+
+
+  }catch(error){
+
+    res.status(500).json({
+
+      database:"error",
+
+      message:error.message
+
+    });
+
+  }
+
+});
+
+
+
+module.exports = app;
