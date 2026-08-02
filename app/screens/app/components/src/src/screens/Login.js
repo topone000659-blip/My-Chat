@@ -1,54 +1,113 @@
-import React, {useState} from 'react';
-
+import React, {useState} from "react";
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  StyleSheet
-} from 'react-native';
+  Button,
+  Alert
+} from "react-native";
 
-import {useNavigation} from '@react-navigation/native';
-
-import colors from '../theme/colors';
+import API from "../services/api";
 
 
-export default function Login(){
 
-  const navigation = useNavigation();
+export default function Login({navigation}) {
+
 
   const [phone,setPhone] = useState("");
+
+  const [password,setPassword] = useState("");
+
+
+
+  const login = async()=>{
+
+    try{
+
+
+      const response = await API.post(
+        "/auth/login",
+        {
+          phone,
+          password
+        }
+      );
+
+
+
+      const token =
+        response.data.token;
+
+
+
+      Alert.alert(
+        "Success",
+        "Login success"
+      );
+
+
+      console.log(token);
+
+
+
+      // နောက်မှာ Token Storage ထည့်မယ်
+
+
+    }catch(error){
+
+
+      Alert.alert(
+        "Error",
+        "Login failed"
+      );
+
+
+    }
+
+  };
+
 
 
   return (
 
-    <View style={styles.container}>
+    <View>
 
-
-      <Text style={styles.logo}>
-        My Chat
+      <Text>
+        Login
       </Text>
 
 
       <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        keyboardType="phone-pad"
+
+        placeholder="Phone"
+
         value={phone}
+
         onChangeText={setPhone}
+
       />
 
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("ChatList")}
-      >
+      <TextInput
 
-        <Text style={styles.buttonText}>
-          LOGIN
-        </Text>
+        placeholder="Password"
 
-      </TouchableOpacity>
+        secureTextEntry
+
+        value={password}
+
+        onChangeText={setPassword}
+
+      />
+
+
+      <Button
+
+        title="Login"
+
+        onPress={login}
+
+      />
 
 
     </View>
@@ -56,54 +115,3 @@ export default function Login(){
   );
 
 }
-
-
-
-const styles = StyleSheet.create({
-
-  container:{
-    flex:1,
-    justifyContent:"center",
-    alignItems:"center",
-    backgroundColor:colors.background,
-    padding:20
-  },
-
-
-  logo:{
-    fontSize:45,
-    fontWeight:"bold",
-    color:colors.primary,
-    marginBottom:40
-  },
-
-
-  input:{
-    width:"90%",
-    height:55,
-    borderWidth:1,
-    borderColor:colors.border,
-    borderRadius:25,
-    paddingHorizontal:20,
-    fontSize:16
-  },
-
-
-  button:{
-    width:"90%",
-    height:55,
-    marginTop:20,
-    borderRadius:25,
-    backgroundColor:colors.primary,
-    justifyContent:"center",
-    alignItems:"center"
-  },
-
-
-  buttonText:{
-    color:"#FFFFFF",
-    fontSize:18,
-    fontWeight:"bold"
-  }
-
-});
