@@ -1,100 +1,140 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from "react";
 
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  FlatList,
-  StyleSheet
-} from 'react-native';
+  Button,
+  FlatList
+} from "react-native";
 
-import ChatBubble from '../components/ChatBubble';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import colors from '../theme/colors';
+import API from "../services/api";
 
 
-export default function ChatRoom(){
+
+export default function ChatRoom({route}) {
+
+
+  const {userId} = route.params;
+
+
+  const [messages,setMessages] = useState([]);
 
   const [message,setMessage] = useState("");
 
-  const [messages,setMessages] = useState([
-    {
-      id:"1",
-      text:"Hello 👋",
-      sender:"other"
-    },
-    {
-      id:"2",
-      text:"Hi, How are you?",
-      sender:"me"
+
+
+  useEffect(()=>{
+
+    loadMessages();
+
+  },[]);
+
+
+
+  const loadMessages = async()=>{
+
+    try{
+
+      const token =
+        await AsyncStorage.getItem("token");
+
+
+      const myId = "MY_USER_ID";
+
+
+      const response =
+        await API.get(
+
+          `/messages/${myId}/${userId}`,
+
+          {
+            headers:{
+              Authorization:
+              `Bearer ${token}`
+            }
+          }
+
+        );
+
+
+      setMessages(response.data);
+
+
+    }catch(error){
+
+      console.log(error);
+
     }
-  ]);
+
+  };
 
 
-  function sendMessage(){
 
-    if(message.trim() === ""){
-      return;
+  const sendMessage = async()=>{
+
+    try{
+
+
+      const token =
+        await AsyncStorage.getItem("token");
+
+
+      await API.post(
+
+        "/messages",
+
+        {
+          sender_id:"MY_USER_ID",
+          receiver_id:userId,
+          message
+        },
+
+        {
+          headers:{
+            Authorization:
+            `Bearer ${token}`
+          }
+        }
+
+      );
+
+
+      setMessage("");
+
+      loadMessages();
+
+
+    }catch(error){
+
+      console.log(error);
+
     }
 
-
-    setMessages([
-      ...messages,
-      {
-        id:Date.now().toString(),
-        text:message,
-        sender:"me"
-      }
-    ]);
-
-
-    setMessage("");
-
-  }
+  };
 
 
 
   return (
 
-    <View style={styles.container}>
-
-
-      <View style={styles.header}>
-
-        <Text style={styles.back}>
-          ←
-        </Text>
-
-
-        <Text style={styles.name}>
-          Ko Ko
-        </Text>
-
-
-        <Text>
-          📞 📹
-        </Text>
-
-      </View>
-
+    <View>
 
 
       <FlatList
 
         data={messages}
 
-        keyExtractor={(item)=>item.id}
+        keyExtractor={
+          (item)=>item.id
+        }
 
         renderItem={({item})=>(
 
-          <ChatBubble
-
-            message={item.text}
-
-            sender={item.sender}
-
-          />
+          <Text>
+            {item.message}
+          </Text>
 
         )}
 
@@ -102,40 +142,25 @@ export default function ChatRoom(){
 
 
 
-      <View style={styles.inputArea}>
+      <TextInput
 
+        placeholder="Message"
 
-        <TextInput
+        value={message}
 
-          style={styles.input}
+        onChangeText={setMessage}
 
-          placeholder="Message"
-
-          value={message}
-
-          onChangeText={setMessage}
-
-        />
+      />
 
 
 
-        <TouchableOpacity
+      <Button
 
-          style={styles.send}
+        title="Send"
 
-          onPress={sendMessage}
+        onPress={sendMessage}
 
-        >
-
-          <Text style={styles.sendText}>
-            ➤
-          </Text>
-
-
-        </TouchableOpacity>
-
-
-      </View>
+      />
 
 
     </View>
@@ -143,69 +168,3 @@ export default function ChatRoom(){
   );
 
 }
-
-
-
-const styles = StyleSheet.create({
-
-  container:{
-    flex:1,
-    backgroundColor:colors.background
-  },
-
-
-  header:{
-    height:70,
-    flexDirection:"row",
-    alignItems:"center",
-    justifyContent:"space-between",
-    padding:15,
-    borderBottomWidth:1,
-    borderColor:colors.border
-  },
-
-
-  back:{
-    fontSize:25
-  },
-
-
-  name:{
-    fontSize:20,
-    fontWeight:"bold"
-  },
-
-
-  inputArea:{
-    flexDirection:"row",
-    padding:10
-  },
-
-
-  input:{
-    flex:1,
-    height:50,
-    borderWidth:1,
-    borderColor:colors.border,
-    borderRadius:25,
-    paddingHorizontal:20
-  },
-
-
-  send:{
-    width:50,
-    height:50,
-    borderRadius:25,
-    backgroundColor:colors.primary,
-    justifyContent:"center",
-    alignItems:"center",
-    marginLeft:10
-  },
-
-
-  sendText:{
-    color:"#FFFFFF",
-    fontSize:20
-  }
-
-});
