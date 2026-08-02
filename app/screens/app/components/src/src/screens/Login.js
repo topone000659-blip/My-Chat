@@ -36,7 +36,15 @@ export default function Login(){
       />
 
 
-      <TouchableOpacity style={styles.button}>
+      
+  <TouchableOpacity
+  style={styles.button}
+  onPress={() => navigation.navigate("ChatList")}
+>
+
+  
+
+
 
         <Text style={styles.buttonText}>
           LOGIN
