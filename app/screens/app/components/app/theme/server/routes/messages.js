@@ -1,5 +1,7 @@
 const express = require("express");
 
+const auth = require("../middleware/auth");
+
 const {
   sendMessage,
   getMessages
@@ -12,6 +14,7 @@ const router = express.Router();
 
 router.post(
   "/",
+  auth,
   sendMessage
 );
 
@@ -19,10 +22,10 @@ router.post(
 
 router.get(
   "/:user1/:user2",
+  auth,
   getMessages
 );
 
 
 
 module.exports = router;
-
